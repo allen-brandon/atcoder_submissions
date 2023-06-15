@@ -4,14 +4,6 @@ n, mod = [int(x) for x in input().split()]
 dp = [[0]*(n+1) for _ in range(n+1)]
 dp[1][2] = 26
 for i in range(2, n+1):
-    if i < 10:
-        dp[i][2] += 26
-    elif i < 100:
-        dp[i][3] += 26
-    elif i < 1000:
-        dp[i][4] += 26
-    else:
-        dp[i][5] += 26
     if not i % 100:
         current_time = process_time()
         print("Epoch: ", i)
