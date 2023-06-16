@@ -1,29 +1,19 @@
-from time import process_time
-start = process_time()
 n, mod = [int(x) for x in input().split()]
 dp = [[0]*(n+1) for _ in range(n+1)]
-dp[1][2] = 26
+
+powers = [10**x for x in range(5)]
+
+#Insert initial segments
+for k in range(4):
+    for i in range(powers[k], min(n+1, powers[k+1])):
+        dp[i][k+2] += 26
+
+#Insert subsequent segments
 for i in range(2, n+1):
-    if not i % 100:
-        current_time = process_time()
-        print("Epoch: ", i)
-        print(current_time)
     for j in range(n+1):
-        dp[i][j] = dp[i-1][j]
-        #Add in k = 2
-        if i >= 1 and j >= 2:
-            dp[i][j] += (dp[i-1][j-2]-dp[i-min(10, i)][j-2])*25
-        #Add in k = 3
-        if i >= 10 and j >= 3:
-            dp[i][j] += (dp[i-10][j-3]-dp[i-min(100, i)][j-3])*25
-        #Add in k = 4
-        if i >= 100 and j >= 4:
-            dp[i][j] += (dp[i-100][j-4]-dp[i-min(1000, i)][j-4])*25
-        #Add in k = 5
-        if i >= 1000 and j >= 5:
-            dp[i][j] += (dp[i-1000][j-5]-dp[i-min(10000, i)][j-5])*25
-            dp[i][j] %= mod
-        
-print(sum(dp[n][:-1])%mod)
-print(dp[-1])
-#for row in dp: print(row)
+        dp[i][j] += dp[i-1][j]
+        for k in range(4):
+            if i >= powers[k] and j >= k+2:
+                dp[i][j] += (dp[i-powers[k]][j-k-2]-dp[i-min(powers[k+1], i)][j-k-2])*25
+        dp[i][j] %= mod
+print((sum(dp[n][:-1])-sum(dp[n-1][:-1]))%mod)
