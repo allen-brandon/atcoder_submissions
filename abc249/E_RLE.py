@@ -1,4 +1,7 @@
 n, mod = [int(x) for x in input().split()]
+if n == 1:
+    print(0)
+    quit()
 dp = [[0]*(n+1) for _ in range(n+1)]
 
 powers = [10**x for x in range(5)]
