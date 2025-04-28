@@ -35,88 +35,104 @@ using namespace __gnu_pbds;
 #define ii(_) int _; cin >> _;
 #define lli(_) ll _; cin >> _;
 ll inf = 151515151515151;
-ll mod = 1000000007;
+int mod = 1000000007;
 
-pair<int,int> didj[4] = {{-1,0},{0,1},{1,0},{0,-1}};
+array<pair<int,int>,4> direc = {{{-1,0},{0,1},{1,0},{0,-1}}};
 string urdl = "^>v<";
 int arr[10003];
-array<map<int,int>,10001> adj;
+array<map<int,int>,10003> adj;
+array<map<int,int>,10003> flow;
 array<int,10003> seen;
 array<array<char,101>,101> board;
+
+int maxflow(int n, int m) {
+    int s = n*m, t = n*m+1;
+    auto enc = [m](int i, int j) { return i*m+j; };
+    auto dec = [m](int idx) { return pair<int,int>({idx/m, idx%m}); };
+    fill(adj.begin(), adj.begin()+t+1, map<int,int>());
+    for (int idx=0; idx<s; ++idx) {
+        if (!arr[idx]) continue;
+        auto [i,j] = dec(idx);
+        if ((i&1)==(j&1)) {
+            adj[s][idx]=1;
+            adj[idx][s]=0;
+            flow[idx][s]=0;
+            flow[s][idx]=0;
+        } else {
+            adj[idx][t]=1;
+            adj[t][idx]=0;
+            flow[idx][t]=0;
+            flow[t][idx]=0;
+        }
+        for (auto [di,dj] : direc) {
+            int x=i+di, y=j+dj;
+            int jdx = enc(x,y);
+            if (x<0 || y<0 || x==n || y==m || !arr[jdx]) continue;
+            if ((i&1)==(j&1)) adj[idx][jdx]=1;
+            flow[idx][jdx]=0;
+        }
+    }
+    while (1) {
+        fill(seen.begin(), seen.begin()+t+1, -1);
+        int found = 0;
+        queue<int> q({s});
+        while (q.size()!=0 && !found) {
+            int u = q.front();
+            q.pop();
+            for (auto [v, w] : flow[u]) {
+                int capacity = adj[u][v]-w;
+                if (!capacity || seen[v]!=-1) continue;
+                seen[v]=u;
+                if (v==t) found=1;
+                q.push(v);
+            }
+        }
+        if (!found) break;
+        int v = t;
+        int msf = mod;
+        while (v!=s) {
+            int u = seen[v];
+            msf = min(msf, adj[u][v]-flow[u][v]);
+            v = u;
+        }
+        v = t;
+        while (v!=s) {
+            int u = seen[v];
+            flow[u][v]+=msf;
+            flow[v][u]-=msf;
+            v = u;
+        }
+    }
+    int res = 0;
+    for (auto [v, w] : flow[s]) {
+        res+=max(0, w);
+    }
+    for (int idx=0; idx<s; ++idx) {
+        if (!arr[idx]) continue;
+        auto [i, j] = dec(idx);
+        for (int k=0; k<4; ++k) {
+            auto [di, dj] = direc[k];
+            int x=i+di, y=j+dj;
+            int jdx = enc(x,y);
+            if (x<0 || y<0 || x==n || y==m || !arr[jdx]) continue;
+            if (flow[idx][jdx]) board[i][j]=urdl[k];
+        }
+    }
+    return res;
+}
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
     ii(n); ii(m);
-    int s = n*m, t = n*m+1;
-    fill(adj.begin(), adj.begin()+t+1, map<int,int>());
-    auto enc = [m](int i, int j) { return i*m+j; };
-    auto dec = [m](int idx) { return pair<int,int>({idx/m, idx%m}); };
     for (int i=0; i<n; ++i) {
         si(row);
         for (int j=0; j<m; ++j) {
-            arr[enc(i,j)]=row[j]=='.';
+            arr[i*m+j]=row[j]=='.';
             board[i][j]=row[j];
         }
     }
-    for (int idx=0; idx<s; ++idx) {
-        if (arr[idx]==0) continue;
-        auto [i, j] = dec(idx);
-        if (idx&1) {
-            adj[idx][t]=1;
-            adj[t][idx]=0;
-        } else {
-            adj[idx][s]=0;
-            adj[s][idx]=1;
-        }
-        for (auto [di, dj] : didj) {
-            int x=i+di,y=j+dj;
-            int jdx=enc(x,y);
-            if (x<0 || y<0 || x==n || y==m || arr[jdx]==0) continue;
-            adj[idx][jdx]=1;
-        }
-    }
-    int found, u, v, res=0;
-    while (1) {
-        fill(seen.begin(), seen.begin()+t+1, -1);
-        queue<int> q({s});
-        found = 0;
-        while (!found && q.size()!=0) {
-            u = q.front();
-            q.pop();
-            for (auto [v, w] : adj[u]) {
-                if (!w or seen[v]!=-1) continue;
-                seen[v]=u;
-                if (v==t) {
-                    found=1;
-                    break;
-                }
-                q.push(v);
-            }
-        }
-        if (!found) break;
-        v = t;
-        while (v!=s) {
-            u=seen[v];
-            adj[v][u]--;
-            adj[u][v]++;
-            auto [i,j] = dec(v);
-            auto [x,y] = dec(u);
-            if (v==t || board[x][y]!='.') {
-                board[i][j]='.';
-            } else if (u!=s) {
-                for (int k=0; i<4; ++k) {
-                    auto [di,dj] = didj[k];
-                    if (x==i+di && y==j+dj) {
-                        board[i][j]=urdl[k];
-                        board[x][y]=urdl[(k+2)%4];
-                    }
-                }
-            }
-            v=u;
-        }
-        res+=1;
-    }
+    int res = maxflow(n, m);
     print(res);
     string row;
     for (int i=0; i<n; ++i) {

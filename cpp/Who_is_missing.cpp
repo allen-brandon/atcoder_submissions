@@ -6,7 +6,16 @@
 #endif
 
 using namespace std;
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <set>
+#include <deque>
+#include <queue>
+#include <numeric>
+#include <bitset>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 using namespace __gnu_pbds;
@@ -25,11 +34,22 @@ using namespace __gnu_pbds;
 #define ii(_) int _; cin >> _;
 #define lli(_) ll _; cin >> _;
 ll inf = 151515151515151;
-ll mod = 998244353;
+ll mod = 1000000007;
 array<string,2> ny = {"No","Yes"};
+array<int,100001> c;
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n);
+    fill_n(c.begin(), n+1, 4);
+    for (int i=0; i<n*4-1; ++i) {
+        ii(x);
+        c[x]--;
+    }
+    int i;
+    for (i=1; i<=n; ++i) {
+        if (c[i]!=0) break;
+    }
+    print(i);
 }

@@ -85,6 +85,8 @@
     "thread": "cpp",
     "__hash_table": "cpp",
     "__tree": "cpp",
-    "map": "cpp"
+    "map": "cpp",
+    "numbers": "cpp",
+    "text_encoding": "cpp"
   }
 }

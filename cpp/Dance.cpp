@@ -6,7 +6,16 @@
 #endif
 
 using namespace std;
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <set>
+#include <deque>
+#include <queue>
+#include <numeric>
+#include <bitset>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 using namespace __gnu_pbds;
@@ -25,11 +34,42 @@ using namespace __gnu_pbds;
 #define ii(_) int _; cin >> _;
 #define lli(_) ll _; cin >> _;
 ll inf = 151515151515151;
-ll mod = 998244353;
+ll mod = 1000000007;
 array<string,2> ny = {"No","Yes"};
+array<array<ll,16>,16> adj;
+array<bool,16> seen;
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n);
+    for (int i=0; i<n*2; ++i) {
+        for (int j=i+1; j<2*n; ++j) {
+            lli(x);
+            adj[i][j]=x;
+        }
+    }
+    fill_n(seen.begin(),16,false);
+    ll msf = 0ll;
+    function<void(int,ll)> bt = [&](int i, ll cur) {
+        if (i==n*2) {
+            msf = max(msf, cur);
+            return;
+        }
+        if (seen[i]) {
+            bt(i+1,cur);
+            return;
+        }
+        seen[i]=true;
+        for (int j=i+1; j<n*2; ++j) {
+            if (seen[j]) continue;
+            seen[j]=true;
+            ll b = adj[i][j];
+            bt(i+1,cur^b);
+            seen[j]=false;
+        }
+        seen[i]=false;
+    };
+    bt(0,0ll);
+    print(msf);
 }

@@ -6,9 +6,19 @@
 #endif
 
 using namespace std;
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <set>
+#include <deque>
+#include <queue>
+#include <numeric>
+#include <bitset>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
+#include <iomanip>
 using namespace __gnu_pbds;
 #define ll long long
 #define ull unsigned ll
@@ -25,11 +35,23 @@ using namespace __gnu_pbds;
 #define ii(_) int _; cin >> _;
 #define lli(_) ll _; cin >> _;
 ll inf = 151515151515151;
-ll mod = 998244353;
+ll mod = 1000000007;
 array<string,2> ny = {"No","Yes"};
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n);
+    bool found = 0;
+    int prev = 0;
+    int x;
+    for (int i=0; i<n; ++i) {
+        cin >> x;
+        if (!found && x>prev) {
+            prev = x;
+        } else {
+            found=true;
+        }
+    }
+    print(prev);
 }

@@ -6,7 +6,16 @@
 #endif
 
 using namespace std;
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <set>
+#include <deque>
+#include <queue>
+#include <numeric>
+#include <bitset>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 using namespace __gnu_pbds;
@@ -27,9 +36,14 @@ using namespace __gnu_pbds;
 ll inf = 151515151515151;
 ll mod = 998244353;
 array<string,2> ny = {"No","Yes"};
+// Way to reach LIS of i, by placing digit j, at idx k
+array<array<array<ll,1001>,11>,3> dp;
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n); ii(m);
+    for (int i=0; i<n; ++i) {
+
+    }
 }

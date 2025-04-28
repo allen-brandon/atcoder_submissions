@@ -6,9 +6,19 @@
 #endif
 
 using namespace std;
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <set>
+#include <deque>
+#include <queue>
+#include <numeric>
+#include <bitset>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
+#include <iomanip>
 using namespace __gnu_pbds;
 #define ll long long
 #define ull unsigned ll
@@ -24,12 +34,34 @@ using namespace __gnu_pbds;
 #define si(_) string _; cin >> _;
 #define ii(_) int _; cin >> _;
 #define lli(_) ll _; cin >> _;
+#define ld long double
+#define ldi(_) ld _; cin >> _;
 ll inf = 151515151515151;
-ll mod = 998244353;
-array<string,2> ny = {"No","Yes"};
+ll mod = 1000000007;
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    lli(n); ldi(a); ldi(x); ldi(y);
+    map<ll,ld> seen;
+    function<ld(ll)> dfs = [&](ll u) -> ld {
+        if (!u) return 0.0;
+        if (seen.find(u)!=seen.end()) return seen[u];
+        // div by a
+        ll v = u/a;
+        ld res = dfs(v)+x;
+
+        // roll
+        ld aggregate = y;
+        for (ld i=2.0; i<=6.0; ++i) {
+            v = u/i;
+            aggregate+=dfs(v)/6.0;
+        }
+        aggregate*=6.0/5.0;
+        res = min(res, aggregate);
+        seen[u] = res;
+        return res;
+    };
+    ld ret = dfs(n);
+    cout << setprecision (32) << ret << "\n";
 }

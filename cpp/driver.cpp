@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     string input = "_input.txt";
     int timeout = 5;
 
-    if (system(("g++-14 -std=c++17 -O2 " + src + " -o " + exe).c_str()) != 0) {
+    if (system(("g++-14 -std=c++23 -O2 " + src + " -o " + exe).c_str()) != 0) {
         cerr << "✖ Compile failed\n";
         return 2;
     }

@@ -6,7 +6,16 @@
 #endif
 
 using namespace std;
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <set>
+#include <deque>
+#include <queue>
+#include <numeric>
+#include <bitset>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 using namespace __gnu_pbds;
@@ -25,11 +34,51 @@ using namespace __gnu_pbds;
 #define ii(_) int _; cin >> _;
 #define lli(_) ll _; cin >> _;
 ll inf = 151515151515151;
-ll mod = 998244353;
-array<string,2> ny = {"No","Yes"};
+ll mod = 1000000007;
+
+array<int,200005> root;
+array<int,200005> sz;
+// array<int,200001> ind;
+
+int find(int a) {
+    while (root[a]!=root[root[a]]) {
+        root[a] = root[root[a]];
+    }
+    return root[a];
+}
+
+int join(int a, int b) {
+    a = find(a);
+    b = find(b);
+    if (a==b) return 0;
+    if (sz[b]>sz[a]) {
+        root[a]=b;
+        sz[b]+=sz[a];
+    } else {
+        root[b]=a;
+        sz[a]+=sz[b];
+    }
+    return 1;
+}
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n); ii(m);
+    fill_n(sz.begin(), n+1, 1);
+    for (int i=0; i<=n; ++i) root[i]=i;
+    for (int i=0; i<m; ++i) {
+        ii(u); ii(v);
+        join(u,v);
+    }
+    ll res = 0;
+    for (int a=1; a<=n; ++a) {
+        if (root[a] == a) {
+            ll x = sz[a];
+            res+=(x*(x-1))/2;
+        }
+    }
+    ll m_neg = m;
+    res -= m_neg;
+    print(res);
 }
