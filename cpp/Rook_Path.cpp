@@ -27,9 +27,29 @@ using namespace __gnu_pbds;
 ll inf = 151515151515151;
 ll mod = 998244353;
 array<string,2> ny = {"No","Yes"};
+array<array<ll, 1000002>,4> dp;
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    lli(h); lli(w); ii(k);
+    lli(x1); lli(y1); lli(x2); lli(y2);
+    fill_n(dp[0].begin(), k+1, 0);
+    fill_n(dp[1].begin(), k+1, 0);
+    fill_n(dp[2].begin(), k+1, 0);
+    fill_n(dp[3].begin(), k+1, 0);
+    dp[3][k] = 1;
+    for (int i=k-1; i>=0; --i) {
+        //neither are same; w-1, h-1 ways to stay at 0; 1 way to move to 1 or 2;
+        dp[0][i] = ((dp[0][i+1]*(h+w-4))%mod + dp[1][i+1] + dp[2][i+1]) % mod;
+        // same row; h-1 ways to move to 0; w-2 ways to stay at 1; 0 ways to move to 2; 1 way to move to 3;
+        dp[1][i] = ((dp[0][i+1]*(h-1))%mod + (dp[1][i+1]*(w-2))%mod + dp[3][i+1]) % mod;
+        //same col; w-1 ways to move to 0; h-2 ways to stay at 1; 1 way to move to 3;
+        dp[2][i] = ((dp[0][i+1]*(w-1))%mod + (dp[2][i+1]*(h-2))%mod + dp[3][i+1]) % mod;
+        //both are same; at x2,y2; no way to move to 0; w-1 to 1, h-1 to 2;
+        dp[3][i] = ((dp[1][i+1]*(w-1))%mod + (dp[2][i+1]*(h-1))%mod) % mod;
+    }
+    int same = (x1==x2) + ((y1==y2)<<1);
+    ll res = dp[same][0];
+    print(res);
 }
