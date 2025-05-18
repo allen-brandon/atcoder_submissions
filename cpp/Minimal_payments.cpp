@@ -28,9 +28,31 @@ array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
+array<int,61> a;
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n); lli(y);
+    for (int i=0; i<n; ++i) {
+        ii(x);
+        a[i] = x;
+    }
+    map<ll,ll> cache;
+    cache[1] = 1;
+    cache[0] = 0;
+    function<ll(ll)> dfs = [&](ll x){
+        if (cache.find(x) != cache.end()) return cache[x];
+        int idx = lower_bound(a.begin(), a.begin()+n, y)-a.begin();
+        ll lg = a[idx];
+        ll sm = a[idx-1];
+        ll res = dfs(x%sm)+x/sm;
+        if (lg!=x<<1) res = min(res, dfs(abs(x-lg))+1);
+        cache[x] = res;
+        return cache[x];
+    };
+    // ll test = dfs(0);
+    // print(test);
+    ll ret = dfs(y);
+    print(ret);
 }

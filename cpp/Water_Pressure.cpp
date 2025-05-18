@@ -32,5 +32,8 @@ ll mod = 998244353;
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(x);
+    float res = float(x);
+    res/=100.0;
+    print(res);
 }

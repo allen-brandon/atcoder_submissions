@@ -28,9 +28,33 @@ array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
+array<int,200001> res;
+array<int,200001> a;
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n); ii(q);
+    iota(a.begin(), a.begin()+n, 0);
+    vi v;
+    v.resize(n);
+    for (int i=0; i<n; ++i) {
+        ii(x);
+        v[i]=x;
+    }
+    sort(v.begin(), v.end());
+    for (int j=0; j<q; ++j) {
+        ii(x);
+        auto idx = lower_bound(a.begin(), a.begin()+n, x, [&v](auto idx, auto x){ return v[idx]<x; });
+        int cur;
+        if (idx == a.begin()+n) {
+            cur = 0;
+        } else {
+            cur = n-*idx;
+        }
+        res[j] = cur;
+    }
+    for (int j=0; j<q; ++j) {
+        print(res[j]);
+    }
 }

@@ -29,7 +29,6 @@ ll mod = 998244353;
 array<string,2> ny = {"No","Yes"};
 
 int main() {
-    USE_INPUT_FILE("_input.txt");
     fio;
     ii(x); ii(y);
     int z = max(0,y-x);

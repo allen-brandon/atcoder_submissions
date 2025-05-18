@@ -28,6 +28,7 @@ ll inf = 151515151515151;
 ll mod = 998244353;
 array<string,2> ny = {"No","Yes"};
 
+
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;

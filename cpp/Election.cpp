@@ -32,5 +32,15 @@ ll mod = 998244353;
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    map<string,int> c;
+    ii(n);
+    for (int i=0; i<n; ++i) {
+        si(s);
+        ++c[s];
+    }
+    pair<string,int> msf = {"",-1};
+    for (auto kvp : c) {
+        if (kvp.second>msf.second) msf = kvp;
+    }
+    print(msf.first)
 }
