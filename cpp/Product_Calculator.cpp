@@ -29,8 +29,49 @@ array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
 
+// ll multiply(ll x, ll y, int k) { way overkill; question is simpler
+//     ll res = 0;
+//     int z1 = 0;
+//     while (y!=0) {
+//         int cur_y = y%10;
+//         ll tmp = x;
+//         int z2 = 0;
+//         while (tmp!=0) {
+//             int cur_x = tmp%10;
+//             int cur_res = cur_y*cur_x;
+//             int z3 = z1+z2;
+//             if (z3<k) {
+//                 if (z3==k-1) cur_res%=10;
+//                 res+=cur_res*pow(10,z3);
+//             }
+//             tmp/=10;
+//             ++z2;
+//         }
+//         y/=10;
+//         ++z1;
+//     }
+//     return res;
+// }
+
+ull multiply(ull x, ull y, ull k) {
+    double z = log10(x)+log10(y);
+    if (z>k) return 1ull;
+    ull ret = x*y;
+    if (ret>=ll(pow(10,k))) return 1ull;
+    return x*y;
+}
+
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n);
+    ull k;
+    cin >> k;
+    ll res = 1;
+    for (int i=0; i<n; ++i) {
+        ull x;
+        cin >> x;
+        res = multiply(res, x, k);
+    }
+    print(res);
 }

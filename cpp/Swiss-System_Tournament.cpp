@@ -10,12 +10,12 @@
 
 using namespace std;
 using namespace __gnu_pbds;
-#define ll long long
-#define ull unsigned ll
+using ll = long long;
+using ull = unsigned long long;
 #define vll vector<ll>
 #define vi vector<int>
 #define counter(_) unordered_map<_,size_t>
-#define ordered_set tree<ll, null_type, less<ll>, rb_tree_tag, tree_order_statistics_node_update>
+#define ordered_set tree<ll, null_type, less<ll>, rb_tree_tag, tree_order_statistics_node_update> // find_by_order(), order_by_key()
 #define ordered_multiset tree<pair<ll,ll>, null_type, less<pair<ll,ll>>, rb_tree_tag, tree_order_statistics_node_update>
 #define fio ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 #define print(_) cout << _ << "\n";
@@ -26,32 +26,41 @@ using namespace __gnu_pbds;
 #define lli(_) ll _; cin >> _;
 array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
-ll inf = 1000000000000000001;
+ll inf = 151515151515151;
 ll mod = 998244353;
-array<ll,61> a;
+array<array<int,103>,103> a;
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    ii(n); lli(y);
-    for (int i=0; i<n; ++i) {
-        lli(x);
-        a[i] = x;
+    ii(n); ii(m);
+    map<char,int> d;
+    d['G']=0;
+    d['C']=1;
+    d['P']=2;
+    for (int i=0; i<n<<1; ++i) {
+        a[i][0] = 0;
+        a[i][1] = i+1;
+        si(s);
+        for (int j=2; j<m+2; ++j) {
+            int x = d[s[j-2]];
+            a[i][j] = x;
+        }
     }
-    a[n] = inf;
-    map<ll,ll> cache;
-    cache[1] = 1;
-    cache[0] = 0;
-    function<ll(ll)> dfs = [&](ll x){
-        if (cache.find(x) != cache.end()) return cache[x];
-        int idx = lower_bound(a.begin(), a.begin()+n, x)-a.begin();
-        ll lg = a[idx];
-        ll sm = a[idx-1];
-        ll res = dfs(x%sm)+x/sm;
-        if (idx!=n && lg-x<x) res = min(res, dfs(lg-x)+1);
-        cache[x] = res;
-        return cache[x];
-    };
-    ll ret = dfs(y);
-    print(ret);
+    for (int j=2; j<m+2; ++j) {
+        for (int i=0; i<n; ++i) {
+            int x = i<<1;
+            int y = x+1;
+            int x_move = a[x][j];
+            int y_move = a[y][j];
+            if (x_move == y_move) continue;
+            if ((x_move+1)%3 == y_move) {
+                --a[x][0];
+            } else {
+                --a[y][0];
+            }
+        }
+        sort(a.begin(),a.begin()+(n<<1));
+    }
+    for (int i=0; i<n<<1; ++i) print(a[i][1]);
 }

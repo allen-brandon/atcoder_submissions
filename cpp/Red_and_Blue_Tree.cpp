@@ -28,9 +28,55 @@ array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
+array<int, 101> a;
+array<int, 11> e;
+// array<ll,100001> state;
+// bitset<100001> used;
+array<vector<pair<int,int>>,1001> adj;
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n); ii(m); ii(k);
+    for (int i=0; i<m; ++i) {
+        ii(x);
+        --x;
+        a[i] = x;
+    }
+    fill_n(adj.begin(), n, vector<pair<int,int>>());
+    for (int i=0; i<n-1; ++i) {
+        ii(u); ii(v);
+        --u; --v;
+        adj[u].emplace_back(v,i);
+        adj[v].emplace_back(u,i);
+    }
+    auto dfs = [](auto& dfs, int u, int p, int t) {
+        if (u==t) return 1;
+        for (auto [v,i] : adj[u]) {
+            if (v==p) continue;
+            // print("test" << " " << u << " " << v << " " << i);
+            ++e[i];
+            if (dfs(dfs,v,u,t)) return 1;
+            --e[i];
+        }
+        return 0;
+    };
+    for (int i=0; i<m-1; ++i) {
+        int u = a[i], v = a[i+1];
+        dfs(dfs,u,u,v);
+    }
+    unordered_map<int,ll> state;
+    state[0] = 1;
+    for (int i=0; i<n-1; ++i) {
+        int x = e[i];
+        unordered_map<int,ll> tmp;
+        for (auto [y,f] : state) {
+            // tmp[y-x]+=f;
+            // tmp[y+x]+=f;
+            tmp[y-x] = (tmp[y-x]+f)%mod;
+            tmp[y+x] = (tmp[y+x]+f)%mod;
+        }
+        state = tmp;
+    }
+    print(state[k]);
 }

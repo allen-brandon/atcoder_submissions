@@ -10,12 +10,12 @@
 
 using namespace std;
 using namespace __gnu_pbds;
-#define ll long long
-#define ull unsigned ll
+using ll = long long;
+using ull = unsigned long long;
 #define vll vector<ll>
 #define vi vector<int>
 #define counter(_) unordered_map<_,size_t>
-#define ordered_set tree<ll, null_type, less<ll>, rb_tree_tag, tree_order_statistics_node_update>
+#define ordered_set tree<ll, null_type, less<ll>, rb_tree_tag, tree_order_statistics_node_update> // find_by_order(), order_by_key()
 #define ordered_multiset tree<pair<ll,ll>, null_type, less<pair<ll,ll>>, rb_tree_tag, tree_order_statistics_node_update>
 #define fio ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 #define print(_) cout << _ << "\n";
@@ -26,32 +26,35 @@ using namespace __gnu_pbds;
 #define lli(_) ll _; cin >> _;
 array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
-ll inf = 1000000000000000001;
+ll inf = 151515151515151;
 ll mod = 998244353;
-array<ll,61> a;
+array<int,200001> res;
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    ii(n); lli(y);
+    ii(h); ii(w); ii(n);
+    map<int,set<pair<int,int>>> rows;
+    map<int,set<pair<int,int>>> cols;
     for (int i=0; i<n; ++i) {
-        lli(x);
-        a[i] = x;
+        ii(x); ii(y);
+        rows[x].emplace(x,y);
+        cols[y].emplace(x,y);
     }
-    a[n] = inf;
-    map<ll,ll> cache;
-    cache[1] = 1;
-    cache[0] = 0;
-    function<ll(ll)> dfs = [&](ll x){
-        if (cache.find(x) != cache.end()) return cache[x];
-        int idx = lower_bound(a.begin(), a.begin()+n, x)-a.begin();
-        ll lg = a[idx];
-        ll sm = a[idx-1];
-        ll res = dfs(x%sm)+x/sm;
-        if (idx!=n && lg-x<x) res = min(res, dfs(lg-x)+1);
-        cache[x] = res;
-        return cache[x];
-    };
-    ll ret = dfs(y);
-    print(ret);
+    ii(q);
+    for (int i=0; i<q; ++i) {
+        ii(t); ii(v);
+        auto& rc = t==1? rows : cols;
+        auto& rc_other = t==1? cols : rows;
+        set<pair<int,int>>& s = rc[v];
+        res[i] = s.size();
+        for (auto& ele : s) {
+            int v1 = t==1? ele.second : ele.first;
+            rc_other[v1].erase(ele);
+        }
+        rc.erase(v);
+    }
+    for (int i=0; i<q; ++i) {
+        print(res[i]);
+    }
 }
