@@ -15,10 +15,9 @@ using ull = unsigned long long;
 #define vll vector<ll>
 #define vi vector<int>
 #define counter(_) unordered_map<_,size_t>
-#define ordered_set tree<ll, null_type, less<ll>, rb_tree_tag, tree_order_statistics_node_update> // find_by_order(), order_of_key()
+#define ordered_set tree<ll, null_type, less<ll>, rb_tree_tag, tree_order_statistics_node_update> // find_by_order(), order_by_key()
 #define ordered_multiset tree<pair<ll,ll>, null_type, less<pair<ll,ll>>, rb_tree_tag, tree_order_statistics_node_update>
 #define fio ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-#define fr(i,l,r) for (int i=l; i<r; ++i)
 #define print(_) cout << _ << "\n";
 #define printv(_) for (const auto& x : _) cout << x << ' '; cout << '\n';
 #define printm(_) cout<<"{";for (const auto& kvp:_) cout<<kvp.first<<":"<<kvp.second<<","; cout<<"}\n";
@@ -33,5 +32,20 @@ ll mod = 998244353;
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n); ii(w);
+    priority_queue<pair<int,int>> pq;
+    for (int i=0; i<n; ++i) {
+        ii(a); ii(b);
+        pq.emplace(a,b);
+    }
+    ll res = 0;
+    while (w != 0 && pq.size() != 0) {
+        auto [a,b] = pq.top();
+        pq.pop();
+        int x = min(b,w);
+        ll cur = ll(a)*ll(x);
+        res+=cur;
+        w-=x;
+    }
+    print(res);
 }

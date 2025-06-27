@@ -28,10 +28,37 @@ using ull = unsigned long long;
 array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
-ll mod = 998244353;
+ll mod = 1<<20;
+array<ll,1<<20> a;
+bitset<200001> t;
+array<ll,200001> x;
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(q);
+    fr(i,0,q) {
+        ii(y); lli(z);
+        t[i]=y-1;
+        x[i]=z;
+    }
+    vi v(1<<20);
+    iota(v.begin(),v.end(),0);
+    fill_n(a.begin(), 1<<20, -1);
+    tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> s(v.begin(), v.end());
+    fr(i,0,q) {
+        ll y = x[i];
+        if (t[i]) {
+            print(a[y%mod]);
+            continue;
+        }
+        int s_idx = s.order_of_key(y%mod);
+        auto ptr = s.find_by_order(s_idx);
+        if (ptr==s.end()) {
+            ptr = s.find_by_order(0);
+        }
+        int idx = *ptr;
+        a[idx]=y;
+        s.erase(idx);
+    }
 }

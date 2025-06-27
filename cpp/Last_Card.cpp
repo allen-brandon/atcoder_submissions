@@ -33,5 +33,8 @@ ll mod = 998244353;
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n); ii(k); ii(a);
+    int ret = ((a+k-1)%n);
+    if (ret==0) ret+=n;
+    print(ret);
 }

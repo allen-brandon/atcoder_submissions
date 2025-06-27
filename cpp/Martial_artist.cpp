@@ -29,9 +29,37 @@ array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
+ll a[200001];
+vi adj[200001];
+bitset<200001> seen;
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n);
+    fr(i,1,n+1) {
+        lli(t); ii(k);
+        a[i]=t;
+        adj[i] = {};
+        fr(j,0,k) {
+            ii(x);
+            adj[i].push_back(x);
+        }
+    }
+    auto dfs = [](auto &dfs, int u) -> void {
+        for (auto v : adj[u]) {
+            if (seen[v]==0) {
+                seen[v]=1;
+                dfs(dfs,v);
+            }
+        }
+    };
+    seen[n]=1;
+    dfs(dfs,n);
+    ll res = 0;
+    fr(i,1,n+1) {
+        res+=a[i]*seen[i];
+        seen[i]=0;
+    }
+    print(res);
 }

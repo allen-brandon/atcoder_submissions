@@ -29,9 +29,32 @@ array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
+int xa[501];
+int ya[501];
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n);
+    map<int,set<int>> d;
+    fr(i,0,n) {
+        ii(x); ii(y);
+        xa[i] = x;
+        ya[i] = y;
+    }
+    fr(i,0,n) {
+        fr(j,0,n) {
+            if (i==j) continue;
+            int x1=xa[i],y1=ya[i];
+            int x2=xa[j],y2=ya[j];
+            int dx=x2-x1,dy=y2-y1;
+            int g = gcd(dx,dy);
+            d[dx/g].insert(dy/g);
+        }
+    }
+    int res = 0;
+    for (auto [k,v] : d) {
+        res+=v.size();
+    }
+    print(res);
 }

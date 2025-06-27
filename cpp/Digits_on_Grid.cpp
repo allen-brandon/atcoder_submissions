@@ -29,9 +29,49 @@ array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
+int a[10][10];
+int rows[1024][10];
+int cols[1024][10];
+ll dp[601][1024];
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(h); ii(w); ii(n);
+    int lim = 1<<max(h,w);
+    n<<=1;
+    fr(i,0,h) {
+        si(s);
+        fr(j,0,w) {
+            int x = s[j]-'0';
+            a[i][j]=x;
+        }
+    }
+    fr(mask,1,lim) {
+        dp[n][mask]=1;
+        fr(j,0,w) {
+            if ((mask&(1<<j))==0) continue;
+            fr(i,0,h) {
+                rows[mask][a[i][j]]|=1<<i;
+            }
+        }
+        fr(i,0,h) {
+            if ((mask&(1<<i))==0) continue;
+            fr(j,0,w) {
+                cols[mask][a[i][j]]|=1<<j;
+            }
+        }
+    }
+    for (int t=n-1; t>=0; --t) {
+        auto rc = t&1? rows : cols;
+        fr(mask,1,lim) {
+            fr(x,1,10) {
+                int mask1 = rc[mask][x];
+                dp[t][mask] += dp[t+1][mask1];
+            }
+            dp[t][mask]%=mod;
+        }
+    }
+    ll res = dp[0][lim-1];
+    print(res);
 }

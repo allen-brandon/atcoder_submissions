@@ -15,7 +15,7 @@ using ull = unsigned long long;
 #define vll vector<ll>
 #define vi vector<int>
 #define counter(_) unordered_map<_,size_t>
-#define ordered_set tree<ll, null_type, less<ll>, rb_tree_tag, tree_order_statistics_node_update> // find_by_order(), order_of_key()
+#define ordered_set tree<ll, null_type, less<ll>, rb_tree_tag, tree_order_statistics_node_update> // find_by_order(), order_by_key()
 #define ordered_multiset tree<pair<ll,ll>, null_type, less<pair<ll,ll>>, rb_tree_tag, tree_order_statistics_node_update>
 #define fio ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 #define fr(i,l,r) for (int i=l; i<r; ++i)
@@ -29,9 +29,26 @@ array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
+array<int,100001> a;
+array<int,100001> b;
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n); ii(k);
+    fr(i,0,n) {
+        a[i] = 0;
+        fr(j,0,3) {
+            ii(x);
+            a[i]+=x;
+        }
+        b[i]=a[i];
+    }
+    sort(b.begin(), b.begin()+n);
+    fr(i,0,n) {
+        int x = a[i]+300;
+        int idx = upper_bound(b.begin(), b.begin()+n, x)-b.begin();
+        int place = n+1-idx;
+        print(ny[place<=k]);
+    }
 }

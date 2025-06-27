@@ -30,8 +30,27 @@ array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
 
+class TrieNode {
+    public:
+    map<int,TrieNode> children;
+    int seen = 0;
+};
+
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    TrieNode tree;
+    int res = 0;
+    ii(n);
+    fr(i,0,n) {
+        ii(m);
+        TrieNode* node = &tree;
+        fr(j,0,m) {
+            ii(x);
+            node = &node->children[x];
+        }
+        res += (node->seen ^ 1);
+        node->seen = 1;
+    }
+    print(res);
 }

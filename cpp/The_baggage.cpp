@@ -29,9 +29,41 @@ array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
+ll a[5];
+ll b[5];
+ll dp[5][32]; //at idx, for given bitmask
+bitset<50000> res;
+
+bool dfs(int i, int mask) {
+    if (mask==31) return true;
+    if (i==5) return false;
+    bool res = false;
+    fr(j,0,5) {
+        if ((1<<j)&mask) continue;
+        
+    }
+    return res;
+}
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(t);
+    fr(i,0,t) {
+        fr(j,0,5) {
+            fr(k,0,32) {
+                dp[j][k]=-1;
+            }
+            lli(x);
+            a[j] = x;
+        }
+        fr(j,0,5) {
+            lli(x);
+            b[j] = x;
+        }
+        res[i] = dfs(0,0);
+    }
+    fr(i,0,t) {
+        print(ny[res[i]]);
+    }
 }

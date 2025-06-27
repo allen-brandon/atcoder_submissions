@@ -33,5 +33,12 @@ ll mod = 998244353;
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    float x;
+    cin >> x;
+    int ru = ceil(x), rd = floor(x);
+    if (abs(x-rd)<abs(x-ru)) {
+        print(rd);
+    } else {
+        print(ru);
+    }
 }

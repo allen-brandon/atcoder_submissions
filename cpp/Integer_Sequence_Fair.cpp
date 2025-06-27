@@ -29,9 +29,39 @@ array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
+array<ll,3> pf = {2,7,17};
+
+ll powmod(ll x, ll n, ll mod) {
+    ll res = 1;
+    while (n!=0) {
+        if (n&1) {
+            res = res*x % mod;
+        }
+        x = x*x % mod;
+        n>>=1;
+    }
+    return res;
+}
+
+ll order(ll x, ll mod) {
+    ll k = mod-1;
+    for (auto f : pf) {
+        while (k%f==0 and powmod(x,k/f,mod)==1) {
+            k/=f;
+        }
+    }
+    return k;
+}
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    lli(n); lli(k); lli(m);
+    m%=mod;
+    ll mod1 = order(m,mod);
+    k%=mod1;
+    ll res = powmod(k,n,mod1);
+    if (res==0) res+=mod1;
+    res = powmod(m,res,mod);
+    print(res);
 }

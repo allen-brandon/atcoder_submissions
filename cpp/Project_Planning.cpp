@@ -29,9 +29,28 @@ array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
+array<ll,200001> a;
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n); ii(k);
+    ll su = 0;
+    fr(i,0,n) {
+        lli(x);
+        a[i]=x;
+        su+=x;
+    }
+    sort(a.begin(),a.begin()+n,greater<ll>());
+    ll topk = 0;
+    ll res = 0;
+    fr(j,1,k) {
+        topk+=a[j-1];
+        if (topk>j*(su-topk)) {
+            res = su-topk;
+            break;
+        }
+    }
+    if (res==0) res = su/k;
+    print(res);
 }
