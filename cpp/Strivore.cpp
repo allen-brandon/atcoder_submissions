@@ -28,10 +28,41 @@ typedef tree<pair<ll,ll>, null_type, less<pair<ll,ll>>, rb_tree_tag, tree_order_
 array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
-ll mod = 998244353;
+ll mod = 1000000007;
+ll modfac[2000001]; //factorial(i) % mod
+
+//n**p % mod in log(p)
+ll f(ll n, ll p) {
+    ll res = 1;
+    while (p) {
+        if (p&1) res = (res*n)%mod;
+        p>>=1;
+        n = (n*n)%mod;
+    }
+    return res;
+}
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    lli(k);
+    si(s);
+    ll n = s.size();
+    ll m = k+n;
+    modfac[0] = 1;
+    fr(i,1,m+1) modfac[i] = (modfac[i-1]*i)%mod;
+    ll modfac_n = modfac[n-1], res{};
+    fr(i,0,k+1) {
+        ll l = f(25,i);
+        ll r = f(26,k-i);
+        ll num = modfac[i+n-1];
+        ll denom = (modfac[i]*modfac_n)%mod;
+        //mod inverse of denomenator under mod
+        denom = f(denom,mod-2);
+        ll comb = (num*denom)%mod; //n-1 choose l
+        l = (l*comb)%mod;
+        res += (l*r)%mod;
+        res -= res>=mod?mod:0;
+    }
+    print(res);
 }

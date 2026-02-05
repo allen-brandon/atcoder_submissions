@@ -29,9 +29,47 @@ array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
+vi adj[200001];
+pair<int,int> dist[200001][2];
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n); ii(m);
+    fr(i,0,m) {
+        ii(u); ii(v);
+        u--; v--;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    si(s);
+    queue<tuple<int,int,ll>> q;
+    fr(i,0,n) {
+        if (s[i]=='S') {
+            q.emplace(i,i,0);
+            dist[i][0] = {i,0};
+        } else {
+            dist[i][0] = {-1,-1};
+        }
+        dist[i][1] = {-1,-1};
+    }
+    while (!q.empty()) {
+        auto [u,p,d] = q.front();
+        q.pop();
+        for (int& v : adj[u]) {
+            if (dist[v][0].first == p || dist[v][1].first == p) continue;
+            if (dist[v][0].first == -1) {
+                dist[v][0] = {p,d+1};
+                q.emplace(v,p,d+1);
+            } else if (dist[v][1].first == -1) {
+                dist[v][1] = {p,d+1};
+                q.emplace(v,p,d+1);
+            }
+        }
+    }
+    fr(i,0,n) {
+        if (s[i]=='D') {
+            print(dist[i][0].second + dist[i][1].second);
+        }
+    }
 }

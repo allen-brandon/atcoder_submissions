@@ -29,9 +29,21 @@ array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
+const int nlim = 250001;
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n);
+    ll coef = 1ll;
+    ll prv = 1; //start with single node
+    ll res = 1;
+    fr(i,2,n+1) {
+        ll tmp = res;
+        res = (coef*prv)%mod;
+        prv = tmp;
+        coef<<=1;
+        coef%=mod;
+    }
+    print(res);
 }

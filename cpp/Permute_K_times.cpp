@@ -29,9 +29,38 @@ array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
+int a[200001][65];
+int b[200001];
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    ii(n); lli(k);
+    fr(i,1,n+1) {
+        ii(x);
+        a[i][0] = x;
+    }
+    fr(i,1,n+1) {
+        ii(x);
+        b[i] = x;
+    }
+    fr(j,0,64) {
+        fr(u,1,n+1) {
+            a[u][j+1] = a[a[u][j]][j];
+        }
+    }
+    vi res(n);
+    fr(i,0,n) {
+        ll x = k;
+        int j = 0, idx = i+1;
+        while (x!=0) {
+            if (x&1) {
+                idx = a[idx][j];
+            }
+            j++;
+            x>>=1;
+        }
+        res[i] = b[idx];
+    }
+    printv(res);
 }

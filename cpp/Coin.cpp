@@ -29,9 +29,35 @@ array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
+ll a[5001];
+ll res[5001];
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    lli(n); lli(m); lli(l);
+    fill_n(a,n+1,0);
+    a[0] = 1ll;
+    ll cur = 0;
+    fr(i,1,m+1) {
+        //add in ith coin
+        int c = i;
+        fr(j,c,n+1) {
+            ll old_val = a[j];
+            a[j] += a[j-c];
+            a[j] -= a[j]>=mod? mod : 0ll;
+        }
+        if (i>=l) {
+            int c = i+1-l;
+            //print i-lth answer
+            res[c-1] = a[n];
+            //take out i-lth coin
+            for (int j = n; j>=c; j--) {
+                ll old_val = a[j];
+                a[j] -= a[j-c];
+                a[j] += a[j]<0? mod : 0;
+            }
+        }
+    }
+    fr(i,0,m+1-l) print(res[i]);
 }

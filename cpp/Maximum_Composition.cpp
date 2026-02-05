@@ -29,9 +29,30 @@ array<pair<int,int>,4> didj = {{{-1,0},{0,1},{1,0},{0,-1}}};
 array<string,2> ny = {"No","Yes"};
 ll inf = 151515151515151;
 ll mod = 998244353;
+pair<ll,ll> arr[200001];
+ll state[11];
 
 int main() {
     USE_INPUT_FILE("_input.txt");
     fio;
-    
+    fill_n(state+1,10,-1ll);
+    state[0] = 1ll;
+    ii(n); ii(k);
+    fr(i,0,n) {
+        lli(a); lli(b);
+        arr[i] = {a,b};
+    }
+    sort(arr,arr+n, [](pair<ll,ll> p1, pair<ll,ll> p2) {
+        return (p1.first-1)*p2.second < (p2.first-1)*p1.second; // float(p1.first)/float(p1.second) < float(p2.first)/float(p2.second);
+    });
+    fr(i,0,n) {
+        auto [a,b] = arr[i];
+        for (int j = k; j>0; j--) {
+            if (state[j-1]<0) continue;
+            state[j] = max(state[j], a*state[j-1]+b);
+        }
+    }
+    // vll test(state,state+k+1);
+    // printv(test);
+    print(state[k]);
 }

@@ -115,6 +115,7 @@
     "syncstream": "cpp",
     "typeindex": "cpp",
     "valarray": "cpp",
-    "filesystem": "cpp"
+    "filesystem": "cpp",
+    "execution": "cpp"
   }
 }
